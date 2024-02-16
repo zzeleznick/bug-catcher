@@ -1,12 +1,16 @@
 import { 
     Actor,
     Engine,
+    Shape,
     Sprite,
     vec,
+    CollisionType,
   } from 'https://esm.sh/excalibur@0.26.0-alpha.264';
   
+import { playerGroup } from "./collisions.ts";
 import { semgreppio } from "./resources.ts";
 import { Keys } from "https://esm.sh/v135/excalibur@0.26.0-alpha.264/build/dist/Input/Keyboard.js";
+
 
 class Player extends Actor {
   jumpImpulse = -500
@@ -19,16 +23,23 @@ class Player extends Actor {
   timeUntilNextJump = 0 // ms to wait until last jump
   coolDownTime = 180 // ms to wait before jumping again
   initialFall = true
+  // The artificial height of the player, used to make the player's floor collision more accurate
+  artificialHeight: number
 
   constructor(game: Engine) {
     super({
+      name: 'Player',
       x: game.halfDrawWidth,
       y: game.drawHeight * 0.75,
       width: 200,
       height: 120,
+      collider: Shape.Capsule(200, 120),
+      collisionType: CollisionType.Active,
+      collisionGroup: playerGroup,
     });
+    this.artificialHeight = this.height + 10;
   }
-
+ 
   public onInitialize() {
     console.log("Player initialized");
     const sprite = new Sprite({
@@ -46,7 +57,7 @@ class Player extends Actor {
     if (engine.input.keyboard.isHeld(Keys.D) || engine.input.keyboard.isHeld(Keys.ArrowRight)) {
       this.pos.x += 5;
     }
-    const isTouchingGround = this.pos.y + this.height / 2 >= engine.drawHeight;
+    const isTouchingGround = this.pos.y + this.artificialHeight / 2 >= engine.drawHeight;
     // If this is the first frame the player is falling, set the airTime to the maximum air time
     // to prevent the player from jumping immediately after falling off a platform
     if (this.initialFall && !isTouchingGround) {
@@ -96,8 +107,8 @@ class Player extends Actor {
 
     // Clamp the player's position within the canvas boundaries
     this.pos.x = Math.max(this.width / 2, Math.min(this.pos.x, engine.drawWidth - this.width / 2));
-    this.pos.y = Math.max(this.height / 2, Math.min(this.pos.y, engine.drawHeight - this.height / 2));
-    
+    this.pos.y = Math.max(this.artificialHeight / 2, Math.min(this.pos.y, engine.drawHeight - this.artificialHeight / 2));
+
     // Log the player's position (if debugging is enabled)
     if (engine.debug) {
       console.log(`isTouchingGround: ${isTouchingGround}, Player position: (${this.pos.x}, ${this.pos.y})`);
