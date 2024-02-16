@@ -6,7 +6,7 @@ import {
 
 import Player from "./src/player.ts";
 import Bug from "./src/bug.ts";
-import Floor from "./src/floor.ts";
+// import Floor from "./src/floor.ts";
 
 const HEIGHT = 800;
 const WIDTH = 800;
@@ -27,7 +27,7 @@ const bug = new Bug(game);
 game.currentScene.add(bug);
 bug.vel.y = 100;
 
-game.currentScene.add(new Floor(game));
+// game.currentScene.add(new Floor(game));
 
 bug.spawnBugs();
 

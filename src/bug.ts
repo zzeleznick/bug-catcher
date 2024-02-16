@@ -20,6 +20,7 @@ class Bug extends Actor {
 
     constructor(game: Engine, spawnRate?: number) {
         super({
+            name: 'Bug',
             x: game.halfDrawWidth,
             y: game.drawHeight * 0.75,
             width: 60,
@@ -47,6 +48,13 @@ class Bug extends Actor {
         if (evt.other.name === 'Player') {
             this.body.collisionType = CollisionType.PreventCollision;
             this.vel.y = 0;
+            this.kill();
+        }
+    }
+
+    public update(engine: Engine,delta: number): void {
+        super.update(engine, delta);
+        if (this.pos.y > engine.drawHeight - this.height / 2) {
             this.kill();
         }
     }

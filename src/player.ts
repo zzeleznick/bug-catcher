@@ -5,6 +5,8 @@ import {
     Sprite,
     vec,
     CollisionType,
+    PostCollisionEvent,
+    PreCollisionEvent
   } from 'https://esm.sh/excalibur@0.26.0-alpha.264';
   
 import { playerGroup } from "./collisions.ts";
@@ -47,14 +49,28 @@ class Player extends Actor {
         destSize: { width: 200, height: 120 },
     });
     this.graphics.use(sprite);
+    this.on('precollision', (evt) => this.onPreCollision(evt));
+    this.on('postcollision', (evt) => this.onPostCollision(evt));
+  }
+
+  onPreCollision(evt: PreCollisionEvent) {
+    console.log(`PreCollisionEvent: Player <> ${evt.other.name}`);
+    console.log(`PreCollisionEvent: velocity ${this.vel.x}, ${this.vel.y}`)
+  }
+  onPostCollision(evt: PostCollisionEvent) {
+    console.log(`PostCollisionEvent: Player <> ${evt.other.name}`);
+    console.log(`PostCollisionEvent: velocity ${this.vel.x}, ${this.vel.y}`)
+    this.vel.x = 0; // Stop the transfer of x velocity post-collision
   }
 
   public update(engine: Engine,delta: number): void {
     super.update(engine, delta);
     if (engine.input.keyboard.isHeld(Keys.A) || engine.input.keyboard.isHeld(Keys.ArrowLeft)) {
+      console.log("A or ArrowLeft is held");
       this.pos.x -= 5;
     }
     if (engine.input.keyboard.isHeld(Keys.D) || engine.input.keyboard.isHeld(Keys.ArrowRight)) {
+      console.log("D or ArrowRight is held");
       this.pos.x += 5;
     }
     const isTouchingGround = this.pos.y + this.artificialHeight / 2 >= engine.drawHeight;

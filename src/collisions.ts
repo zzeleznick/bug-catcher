@@ -8,7 +8,6 @@ export const _playerGroup = CollisionGroupManager.create('player')
 export const floorGroup = CollisionGroupManager.create('floor')
 
 export const bugGroup = CollisionGroup.collidesWith([
-    floorGroup, // collides with the floor
     _playerGroup,
 ]);
 
