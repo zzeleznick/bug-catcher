@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "dev": "deno run -A watch.ts",
+    "serve": "npx serve -l 8000 --cors",
+    "bundle": "deno bundle main.ts game.bundle.js --config tsconfig.json"
+  }
+}

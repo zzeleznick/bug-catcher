@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+
+# production
+/build
+game.bundle.js
+
+# misc
+.DS_Store
+*.pem
+*.log
