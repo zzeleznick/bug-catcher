@@ -9,3 +9,4 @@ game.bundle.js
 .DS_Store
 *.pem
 *.log
+.vercel
