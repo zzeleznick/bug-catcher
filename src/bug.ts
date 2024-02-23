@@ -17,6 +17,7 @@ const maxBugs = 100;
 class Bug extends Actor {
     spawnRate = 1000; // default spawn rate
     game: Engine;
+    marginX = 4; // margin from the edge of the screen
 
     constructor(game: Engine, spawnRate?: number) {
         super({
@@ -71,7 +72,7 @@ class Bug extends Actor {
                     return;
                 }
                 const bug = new Bug(this.game, randomSpawnRate);
-                bug.pos.x = random.floating(0, this.game.drawWidth);
+                bug.pos.x = random.floating(this.width / 2 + this.marginX, this.game.drawWidth - (this.width / 2 + this.marginX));
                 bug.pos.y = random.floating(-60, -100)
                 bug.vel.y = 100;
                 this.game.currentScene.add(bug);
